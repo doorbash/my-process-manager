@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"log"
+	"sync"
 	"time"
 
 	"github.com/go-cmd/cmd"
@@ -22,7 +23,7 @@ type ProcessHandler struct {
 	logsFunc      LogsFunc
 	ShutDown      bool
 	logs          map[int64]*LogsList
-	// logsLock       *sync.RWMutex
+	logsLock      *sync.RWMutex
 }
 
 func (ph *ProcessHandler) AddProcess(p *Process) {
@@ -31,18 +32,22 @@ func (ph *ProcessHandler) AddProcess(p *Process) {
 		return
 	}
 
+	ph.logsLock.Lock()
 	if ph.logs[p.Id] == nil {
 		ph.logs[p.Id] = NewLogsList()
 	}
+	ph.logsLock.Unlock()
 
 	go func() {
 		for {
 			p.Run(func(time int64, _type, message string) {
+				ph.logsLock.RLock()
 				ph.logs[p.Id].Add(&Log{
 					Time:    time,
 					Type:    _type,
 					Message: message,
 				})
+				ph.logsLock.RUnlock()
 				ph.logsFunc(p.Id, time, _type, message)
 			})
 			var status cmd.Status
@@ -101,6 +106,8 @@ func (ph *ProcessHandler) Stop() {
 }
 
 func (ph *ProcessHandler) GetLogs(id int64) []*Log {
+	ph.logsLock.RLock()
+	defer ph.logsLock.RUnlock()
 	if ph.logs[id] == nil {
 		return []*Log{}
 	}
@@ -108,6 +115,8 @@ func (ph *ProcessHandler) GetLogs(id int64) []*Log {
 }
 
 func (ph *ProcessHandler) DeleteLogs(id int64) {
+	ph.logsLock.Lock()
+	defer ph.logsLock.Unlock()
 	delete(ph.logs, id)
 }
 
