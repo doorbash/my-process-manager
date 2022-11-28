@@ -129,5 +129,6 @@ func NewProcessHandler(
 		runStatusFunc: runStatusFunc,
 		logsFunc:      logsFunc,
 		logs:          map[int64]*LogsList{},
+		logsLock:      &sync.RWMutex{},
 	}
 }
