@@ -18,9 +18,9 @@
     "email": ""
   },
   "Info": {
-    "companyName": "my-process-manager",
-    "productName": "my-process-manager",
-    "productVersion": "1.0.0",
+    "companyName": "mpm",
+    "productName": "mpm",
+    "productVersion": "1.0.1",
     "copyright": "Copyright 2022",
     "comments": "Built using Wails (https://wails.app)"
   },
