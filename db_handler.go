@@ -65,11 +65,10 @@ func (d *DBHandler) UpdateProcess(ctx context.Context, p *Process) error {
 	defer cancel()
 	_, err = db.ExecContext(
 		ctx,
-		"update processes set name = ?, command = ?, status = ?, order_id = ? where id = ?",
+		"update processes set name = ?, command = ?, status = ? where id = ?",
 		p.Name,
 		p.Command,
 		p.Status,
-		p.OrderId,
 		p.Id,
 	)
 	return err
