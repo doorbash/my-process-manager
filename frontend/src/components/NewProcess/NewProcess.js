@@ -75,6 +75,8 @@ class NewProcess extends Component {
             id="process-name"
             required={true}
             defaultValue={this.state.name}
+            autoComplete="off"
+            aria-autocomplete="none"
             onChange={(e) => {
               this.setState({ name: e.target.value })
             }}
@@ -87,7 +89,6 @@ class NewProcess extends Component {
             className="new-process-input"
             id="command"
             rows={8}
-            cols={50}
             required={true}
             defaultValue={this.state.command}
             onChange={(e) => {

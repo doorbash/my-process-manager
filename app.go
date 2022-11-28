@@ -129,17 +129,23 @@ func (b *App) InsertProcess(p *Process) error {
 }
 
 func (b *App) UpdateProcess(p *Process) error {
-	b.processHandler.RemoveProcess(p.Id)
-	err := b.dbHandler.UpdateProcess(b.ctx, p)
+	op, err := b.dbHandler.GetProcess(b.ctx, p.Id)
 	if err != nil {
 		return err
 	}
-	p, err = b.dbHandler.GetProcess(b.ctx, p.Id)
+	err = b.dbHandler.UpdateProcess(b.ctx, p)
 	if err != nil {
 		return err
 	}
-	if p.Status == 1 {
-		b.processHandler.AddProcess(p)
+	if op.Command != p.Command {
+		b.processHandler.RemoveProcess(p.Id)
+		p, err = b.dbHandler.GetProcess(b.ctx, p.Id)
+		if err != nil {
+			return err
+		}
+		if p.Status == 1 {
+			b.processHandler.AddProcess(p)
+		}
 	}
 	return nil
 }
