@@ -1,0 +1,17 @@
+.header {
+    background-color: #2496ed;
+    font-family: RobotoMedium, sans-serif;
+    @apply py-3 px-5 flex justify-between items-center text-white;
+}
+
+.header-title {
+    font-size: 1.5rem;
+}
+
+.menu-icon {
+    @apply rounded-full flex items-center justify-center cursor-pointer transition-all
+}
+
+.menu-icon:hover {
+    background-color: #1182d9;
+}

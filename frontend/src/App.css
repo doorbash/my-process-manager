@@ -1,0 +1,17 @@
+.app {
+  height: 100vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.app-content {
+  height: 100%;
+  overflow-y: auto;
+}
+
+.custom-tooltip {
+  background-color: #383838;
+  padding: 0.3em 0.8em;
+  font-size: 0.8rem;
+  font-family: RobotoMedium, sans-serif;
+}

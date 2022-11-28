@@ -1,0 +1,33 @@
+.new-process-label {
+    @apply block text-gray-700 text-sm font-bold
+}
+
+.new-process-label span {
+    @apply text-xs
+}
+
+.new-process-input {
+    @apply shadow appearance-none border rounded w-full py-2 px-3 text-gray-700 leading-tight focus:outline-none col-span-3
+}
+
+.new-process-input:focus {
+    @apply ring-1 ring-blue-400
+}
+
+.new-process-submit {
+    @apply w-full pt-4 flex justify-center col-span-4;
+}
+
+@keyframes alert-animation{
+    0%, 100% {
+        transform: translateY(100%);
+    }
+    20%, 80% {
+        transform: none;
+    }
+}
+.error-alert {
+    animation: alert-animation 5s;
+    animation-timing-function: ease-in-out;
+    animation-fill-mode: both;
+}
