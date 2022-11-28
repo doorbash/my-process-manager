@@ -12,6 +12,8 @@ export function InsertProcess(arg1:main.Process):Promise<Error>;
 
 export function OpenGithub():Promise<void>;
 
+export function ProcessesReorder(arg1:Array<number>):Promise<boolean>;
+
 export function RunProcess(arg1:number):Promise<Error>;
 
 export function StopProcess(arg1:number):Promise<Error>;

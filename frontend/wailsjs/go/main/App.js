@@ -22,6 +22,10 @@ export function OpenGithub() {
   return window['go']['main']['App']['OpenGithub']();
 }
 
+export function ProcessesReorder(arg1) {
+  return window['go']['main']['App']['ProcessesReorder'](arg1);
+}
+
 export function RunProcess(arg1) {
   return window['go']['main']['App']['RunProcess'](arg1);
 }

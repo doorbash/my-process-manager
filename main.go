@@ -25,7 +25,6 @@ const (
 )
 
 func main() {
-
 	app := NewApp(
 		GITHUB_URL,
 		DB_NAME,

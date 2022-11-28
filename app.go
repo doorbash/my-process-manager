@@ -156,7 +156,7 @@ func (b *App) GetProcesses() []Process {
 		return []Process{}
 	}
 	plist := b.processHandler.processList.GetAll()
-	log.Println("plist:", plist)
+	// log.Println("plist:", plist)
 
 	for i := range list {
 		for j := range plist {
@@ -201,4 +201,15 @@ func (b *App) StopProcess(id int64) error {
 
 func (b *App) GetLogs(id int64) []*Log {
 	return b.processHandler.GetLogs(id)
+}
+
+func (b *App) ProcessesReorder(ids []int64) bool {
+	// log.Println(ids)
+	for i, v := range ids {
+		err := b.dbHandler.UpdateProcessOrderId(b.ctx, v, i+1)
+		if err != nil {
+			return false
+		}
+	}
+	return true
 }

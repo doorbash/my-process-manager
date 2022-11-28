@@ -15,10 +15,10 @@ type DBHandler struct {
 
 func (d *DBHandler) Init(ctx context.Context) error {
 	db, err := sql.Open("sqlite3", d.dbPath)
-	defer db.Close()
 	if err != nil {
 		return err
 	}
+	defer db.Close()
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 	_, err = db.ExecContext(ctx, `CREATE TABLE IF NOT EXISTS "processes" (
@@ -27,6 +27,8 @@ func (d *DBHandler) Init(ctx context.Context) error {
 		"create_time" INTEGER NOT NULL,
 		"command" TEXT NOT NULL,
 		"status" INTEGER NOT NULL,
+		"order_id" INTEGER NOT NULL,
+
 		PRIMARY KEY("id" AUTOINCREMENT)
 	)`)
 	return err
@@ -34,49 +36,68 @@ func (d *DBHandler) Init(ctx context.Context) error {
 
 func (d *DBHandler) InsertProcess(ctx context.Context, p *Process) (int64, error) {
 	db, err := sql.Open("sqlite3", d.dbPath)
-	defer db.Close()
 	if err != nil {
 		return 0, err
 	}
+	defer db.Close()
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 	var id int64
 	db.QueryRowContext(
 		ctx,
-		"insert into processes(name,create_time,command,status) values(?,?,?,?) RETURNING id",
+		"insert into processes(name,create_time,command,status,order_id) values(?,?,?,?,(SELECT ifnull(max(order_id), 0) + 1 from processes)) returning id",
 		p.Name,
 		p.CreateTime,
 		p.Command,
 		p.Status,
+		p.OrderId,
 	).Scan(&id)
 	return id, err
 }
 
 func (d *DBHandler) UpdateProcess(ctx context.Context, p *Process) error {
 	db, err := sql.Open("sqlite3", d.dbPath)
-	defer db.Close()
 	if err != nil {
 		return err
 	}
+	defer db.Close()
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 	_, err = db.ExecContext(
 		ctx,
-		"update processes set name = ?, command = ?, status = ? where id = ?",
+		"update processes set name = ?, command = ?, status = ?, order_id = ? where id = ?",
 		p.Name,
 		p.Command,
 		p.Status,
+		p.OrderId,
 		p.Id,
+	)
+	return err
+}
+
+func (d *DBHandler) UpdateProcessOrderId(ctx context.Context, id int64, orderId int) error {
+	db, err := sql.Open("sqlite3", d.dbPath)
+	if err != nil {
+		return err
+	}
+	defer db.Close()
+	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
+	defer cancel()
+	_, err = db.ExecContext(
+		ctx,
+		"update processes set order_id = ? where id = ?",
+		orderId,
+		id,
 	)
 	return err
 }
 
 func (d *DBHandler) DeleteProcess(ctx context.Context, id int64) error {
 	db, err := sql.Open("sqlite3", d.dbPath)
-	defer db.Close()
 	if err != nil {
 		return err
 	}
+	defer db.Close()
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 	_, err = db.ExecContext(
@@ -89,16 +110,17 @@ func (d *DBHandler) DeleteProcess(ctx context.Context, id int64) error {
 
 func (d *DBHandler) GetProcesses(ctx context.Context, onlyStatusOne bool) ([]Process, error) {
 	db, err := sql.Open("sqlite3", d.dbPath)
-	defer db.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer db.Close()
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
-	query := "select id,name,create_time,command,status from processes"
+	query := "select id,name,create_time,command,status,order_id from processes"
 	if onlyStatusOne {
 		query = query + " where status = 1"
 	}
+	query += " order by order_id asc"
 	rows, err := db.QueryContext(
 		ctx,
 		query,
@@ -109,7 +131,7 @@ func (d *DBHandler) GetProcesses(ctx context.Context, onlyStatusOne bool) ([]Pro
 	ret := make([]Process, 0)
 	for rows.Next() {
 		p := Process{}
-		err = rows.Scan(&p.Id, &p.Name, &p.CreateTime, &p.Command, &p.Status)
+		err = rows.Scan(&p.Id, &p.Name, &p.CreateTime, &p.Command, &p.Status, &p.OrderId)
 		if err != nil {
 			return nil, err
 		}
@@ -120,19 +142,19 @@ func (d *DBHandler) GetProcesses(ctx context.Context, onlyStatusOne bool) ([]Pro
 
 func (d *DBHandler) GetProcess(ctx context.Context, id int64) (*Process, error) {
 	db, err := sql.Open("sqlite3", d.dbPath)
-	defer db.Close()
 	if err != nil {
 		return nil, err
 	}
+	defer db.Close()
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
 	row := db.QueryRowContext(
 		ctx,
-		"select id,name,create_time,command,status from processes where id = ?",
+		"select id,name,create_time,command,status,order_id from processes where id = ?",
 		id,
 	)
 	p := Process{}
-	err = row.Scan(&p.Id, &p.Name, &p.CreateTime, &p.Command, &p.Status)
+	err = row.Scan(&p.Id, &p.Name, &p.CreateTime, &p.Command, &p.Status, &p.OrderId)
 	if err != nil {
 		return nil, err
 	}

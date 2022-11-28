@@ -16,6 +16,7 @@ type Process struct {
 	CreateTime int64  `json:"create_time"`
 	Command    string `json:"command"`
 	Status     int64  `json:"status"`
+	OrderId    int64  `json:"order_id"`
 
 	RunStatus  string            `json:"run_status"`
 	GoCmd      *cmd.Cmd          `json:"-"`

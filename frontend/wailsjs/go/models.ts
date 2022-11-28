@@ -22,6 +22,7 @@ export namespace main {
 	    create_time: number;
 	    command: string;
 	    status: number;
+	    order_id: number;
 	    run_status: string;
 	
 	    static createFrom(source: any = {}) {
@@ -35,6 +36,7 @@ export namespace main {
 	        this.create_time = source["create_time"];
 	        this.command = source["command"];
 	        this.status = source["status"];
+	        this.order_id = source["order_id"];
 	        this.run_status = source["run_status"];
 	    }
 	}
