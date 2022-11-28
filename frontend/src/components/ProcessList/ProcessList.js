@@ -118,7 +118,7 @@ class ProcessList extends Component {
               ) : item.run_status === "error" ? (
                 <div>ERROR</div>
               ) : (
-                <div>WAITING</div>
+                <div>IDLE</div>
               )}
             </div>
           </div>

@@ -66,6 +66,7 @@ class NewProcess extends Component {
           className="px-8 pt-4 mb-4 grid grid-cols-4 items-center gap-3 place-items-start"
           onSubmit={this.handleSubmit}
           autoComplete="off"
+          spellCheck="false"
         >
           <label className="new-process-label" htmlFor="process-name">
             Name:
@@ -77,6 +78,7 @@ class NewProcess extends Component {
             defaultValue={this.state.name}
             autoComplete="off"
             aria-autocomplete="none"
+            spellCheck="false"
             onChange={(e) => {
               this.setState({ name: e.target.value })
             }}
@@ -91,6 +93,9 @@ class NewProcess extends Component {
             rows={8}
             required={true}
             defaultValue={this.state.command}
+            autoComplete="off"
+            aria-autocomplete="none"
+            spellCheck="false"
             onChange={(e) => {
               this.setState({ command: e.target.value })
             }}
