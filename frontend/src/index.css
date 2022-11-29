@@ -52,4 +52,5 @@ body {
   background-color: #f4f4f6;
   overscroll-behavior: none;
   user-select: none;
+  overflow-y: hidden;
 }
