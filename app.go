@@ -210,12 +210,5 @@ func (b *App) GetLogs(id int64) []*Log {
 }
 
 func (b *App) ProcessesReorder(ids []int64) bool {
-	// log.Println(ids)
-	for i, v := range ids {
-		err := b.dbHandler.UpdateProcessOrderId(b.ctx, v, i+1)
-		if err != nil {
-			return false
-		}
-	}
-	return true
+	return b.dbHandler.UpdateProcessesOrderId(b.ctx, ids) == nil
 }

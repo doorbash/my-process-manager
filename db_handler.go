@@ -74,7 +74,7 @@ func (d *DBHandler) UpdateProcess(ctx context.Context, p *Process) error {
 	return err
 }
 
-func (d *DBHandler) UpdateProcessOrderId(ctx context.Context, id int64, orderId int) error {
+func (d *DBHandler) UpdateProcessesOrderId(ctx context.Context, ids []int64) error {
 	db, err := sql.Open("sqlite3", d.dbPath)
 	if err != nil {
 		return err
@@ -82,13 +82,18 @@ func (d *DBHandler) UpdateProcessOrderId(ctx context.Context, id int64, orderId 
 	defer db.Close()
 	ctx, cancel := context.WithTimeout(ctx, d.contextTimeout)
 	defer cancel()
-	_, err = db.ExecContext(
-		ctx,
-		"update processes set order_id = ? where id = ?",
-		orderId,
-		id,
-	)
-	return err
+	tx, err := db.BeginTx(ctx, &sql.TxOptions{})
+	if err != nil {
+		return err
+	}
+	defer tx.Rollback()
+	for i, v := range ids {
+		_, err = tx.ExecContext(ctx, "update processes set order_id = ? where id = ?", i+1, v)
+		if err != nil {
+			return err
+		}
+	}
+	return tx.Commit()
 }
 
 func (d *DBHandler) DeleteProcess(ctx context.Context, id int64) error {
