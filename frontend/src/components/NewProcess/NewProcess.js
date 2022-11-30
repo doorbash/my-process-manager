@@ -73,7 +73,7 @@ class NewProcess extends Component {
         animate={{
           position: "static",
           opacity: 1,
-          transition: { duration: 0.3 },
+          transition: { duration: 0.15 },
         }}
         exit={{
           position: "absolute",
