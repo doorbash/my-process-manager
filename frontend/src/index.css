@@ -3,18 +3,8 @@
 @tailwind utilities;
 
 @font-face {
-  font-family: "RobotoThin";
-  src: url("fonts/Roboto-Thin.ttf");
-}
-
-@font-face {
   font-family: "RobotoRegular";
   src: url("fonts/Roboto-Regular.ttf");
-}
-
-@font-face {
-  font-family: "RobotoLight";
-  src: url("fonts/Roboto-Light.ttf");
 }
 
 @font-face {
@@ -23,8 +13,8 @@
 }
 
 @font-face {
-  font-family: "RobotoBold";
-  src: url("fonts/Roboto-Bold.ttf");
+  font-family: "CascadiaMono";
+  src: url("fonts/CascadiaMono.ttf");
 }
 
 .btn-primary {
@@ -53,4 +43,5 @@ body {
   overscroll-behavior: none;
   user-select: none;
   overflow-y: hidden;
+  overflow-x: hidden;
 }

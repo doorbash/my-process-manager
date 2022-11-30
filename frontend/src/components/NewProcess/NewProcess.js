@@ -3,6 +3,7 @@ import { useLocation, useNavigate } from "react-router-dom"
 import "tw-elements"
 import AppContext from "../../contexts/AppContext"
 import "./NewProcess.css"
+import { motion } from "framer-motion"
 
 class NewProcess extends Component {
   constructor(props) {
@@ -61,7 +62,27 @@ class NewProcess extends Component {
 
   render() {
     return (
-      <>
+      <motion.div
+        initial={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          opacity: 0,
+          transition: { duration: 0 },
+        }}
+        animate={{
+          position: "static",
+          opacity: 1,
+          transition: { duration: 0.3 },
+        }}
+        exit={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          opacity: 0,
+          transition: { duration: 0 },
+        }}
+      >
         <form
           className="px-8 pt-4 mb-4 grid grid-cols-4 items-center gap-3 place-items-start"
           onSubmit={this.handleSubmit}
@@ -83,12 +104,8 @@ class NewProcess extends Component {
               this.setState({ name: e.target.value })
             }}
           ></input>
-
-          <label className="new-process-label" htmlFor="command">
-            Command:
-          </label>
           <textarea
-            className="new-process-input"
+            className="new-process-command"
             id="command"
             rows={8}
             required={true}
@@ -101,7 +118,7 @@ class NewProcess extends Component {
             }}
           ></textarea>
           <div className="new-process-submit">
-            <input className="btn-primary" type="submit" value="Save" />
+            <input className="btn-primary" type="submit" value="save" />
           </div>
         </form>
         {this.state.error && (
@@ -113,7 +130,7 @@ class NewProcess extends Component {
             {this.state.error}
           </div>
         )}
-      </>
+      </motion.div>
     )
   }
 }

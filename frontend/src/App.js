@@ -1,14 +1,10 @@
 import "./App.css"
 
 import Header from "./components/Header/Header"
-import ProcessList from "./components/ProcessList/ProcessList"
-import NewProcess from "./components/NewProcess/NewProcess"
-import { Routes, Route, BrowserRouter as Router } from "react-router-dom"
-import Settings from "./components/Settings/Settings"
-import Logs from "./components/Logs/Logs"
-
 import React, { Component } from "react"
 import AppContext from "./contexts/AppContext"
+import AnimatedRoutes from "./components/AnimatedRoutes/AnimatedRoutes"
+import { BrowserRouter as Router } from "react-router-dom"
 
 export default class App extends Component {
   constructor(props) {
@@ -80,13 +76,7 @@ export default class App extends Component {
               className="app-content"
               style={{ backgroundColor: this.state.bgColor }}
             >
-              <Routes>
-                <Route path="/" element={<ProcessList />} />
-                <Route path="/new-process" element={<NewProcess />} />
-                <Route path="/edit-process" element={<NewProcess />} />
-                <Route path="/settings" element={<Settings />} />
-                <Route path="/logs" element={<Logs />} />
-              </Routes>
+              <AnimatedRoutes />
             </div>
           </AppContext.Provider>
         </Router>

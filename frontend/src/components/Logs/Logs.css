@@ -1,6 +1,6 @@
 .logs {
     user-select: text;
-    font-family: monospace;
+    font-family: 'CascadiaMono';
     white-space: pre-wrap;
     color: white;
 }

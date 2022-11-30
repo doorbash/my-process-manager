@@ -2,6 +2,7 @@ import React, { Component, useContext } from "react"
 import { useLocation, useNavigate } from "react-router-dom"
 import AppContext from "../../contexts/AppContext"
 import "./Logs.css"
+import { motion } from "framer-motion"
 
 const MAX_LINES = 50
 
@@ -64,13 +65,34 @@ class Logs extends Component {
     //   div.scrollHeight - div.clientHeight <=
     //   div.scrollTop + div.offsetHeight * 0.25
     // if (isScrolledToBottom) {
-      div.scrollTop = div.scrollHeight - div.clientHeight
+    div.scrollTop = div.scrollHeight - div.clientHeight
     // }
   }
 
   render() {
     return (
-      <div className="logs">
+      <motion.div
+        initial={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          opacity: 0,
+          transition: { duration: 0 },
+        }}
+        animate={{
+          position: "static",
+          opacity: 1,
+          transition: { duration: 0.15 },
+        }}
+        exit={{
+          position: "absolute",
+          left: 0,
+          right: 0,
+          opacity: 0,
+          transition: { duration: 0 },
+        }}
+        className="logs"
+      >
         {this.state.logs.map((item) => {
           return (
             <div className="log text-xs p-1">
@@ -78,7 +100,7 @@ class Logs extends Component {
             </div>
           )
         })}
-      </div>
+      </motion.div>
     )
   }
 }
