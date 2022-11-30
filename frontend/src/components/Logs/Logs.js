@@ -19,6 +19,12 @@ class Logs extends Component {
   onEvent(id, time, type, message) {
     console.log("run log >>>>>>", id, time, type, message)
     if (id !== this.props.location.state.id) return
+
+    if (type === "clear") {
+      this.setState({ logs: [] })
+      return
+    }
+
     this.setState((st) => {
       return {
         logs: [

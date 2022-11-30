@@ -20,7 +20,7 @@
   "Info": {
     "companyName": "mpm",
     "productName": "mpm",
-    "productVersion": "1.1.5",
+    "productVersion": "1.1.6",
     "copyright": "Copyright 2022",
     "comments": "Built using Wails (https://wails.app)"
   },

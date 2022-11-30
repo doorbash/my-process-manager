@@ -1,4 +1,4 @@
-import { Settings, GitHub, ArrowBack } from "@material-ui/icons"
+import { GitHub, ArrowBack, Delete } from "@material-ui/icons"
 import { useLocation, useNavigate } from "react-router-dom"
 import "./Header.css"
 
@@ -28,20 +28,38 @@ class Header extends Component {
           </div>
         </div>
         <div className="flex justify-end items-center gap-3">
-          <div
-            data-bs-toggle="tooltip"
-            title="GITHUB"
-            data-bs-placement="bottom"
-            className="menu-icon p-1"
-          >
-            <GitHub
-              style={{ fontSize: "1.9rem" }}
-              onClick={() => {
-                if (!window.go) return
-                window.go.main.App.OpenGithub()
-              }}
-            />
-          </div>
+          {this.props.location.pathname === "/logs" && (
+            <div
+              data-bs-toggle="tooltip"
+              title="CLEAR LOGS"
+              data-bs-placement="bottom"
+              className="menu-icon p-1"
+            >
+              <Delete
+                style={{ fontSize: "1.9rem" }}
+                onClick={() => {
+                  if (!window.go) return
+                  window.go.main.App.DeleteLogs(this.props.location.state.id)
+                }}
+              />
+            </div>
+          )}
+          {this.props.location.pathname !== "/logs" && (
+            <div
+              data-bs-toggle="tooltip"
+              title="GITHUB"
+              data-bs-placement="bottom"
+              className="menu-icon p-1"
+            >
+              <GitHub
+                style={{ fontSize: "1.9rem" }}
+                onClick={() => {
+                  if (!window.go) return
+                  window.go.main.App.OpenGithub()
+                }}
+              />
+            </div>
+          )}
         </div>
       </header>
     )

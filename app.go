@@ -212,3 +212,8 @@ func (b *App) GetLogs(id int64) []*Log {
 func (b *App) ProcessesReorder(ids []int64) bool {
 	return b.dbHandler.UpdateProcessesOrderId(b.ctx, ids) == nil
 }
+
+func (b *App) DeleteLogs(id int64) {
+	b.processHandler.ClearLogs(id)
+	runtime.EventsEmit(b.ctx, "run-log", id, "", "clear", "")
+}

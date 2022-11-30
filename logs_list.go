@@ -31,6 +31,12 @@ func (ll *LogsList) Add(log *Log) {
 	ll.list.PushBack(log)
 }
 
+func (ll *LogsList) Clear() {
+	ll.lock.Lock()
+	defer ll.lock.Unlock()
+	ll.list.Init()
+}
+
 func NewLogsList() *LogsList {
 	return &LogsList{
 		list: list.New(),

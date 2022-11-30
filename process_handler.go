@@ -120,6 +120,15 @@ func (ph *ProcessHandler) DeleteLogs(id int64) {
 	delete(ph.logs, id)
 }
 
+func (ph *ProcessHandler) ClearLogs(id int64) {
+	ph.logsLock.RLock()
+	ll := ph.logs[id]
+	ph.logsLock.RUnlock()
+	if ll != nil {
+		ll.Clear()
+	}
+}
+
 func NewProcessHandler(
 	runStatusFunc ProcessRunStatusFunc,
 	logsFunc LogsFunc,
