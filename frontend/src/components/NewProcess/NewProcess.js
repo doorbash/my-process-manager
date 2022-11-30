@@ -104,6 +104,9 @@ class NewProcess extends Component {
               this.setState({ name: e.target.value })
             }}
           ></input>
+          <label className="new-process-label" htmlFor="command">
+            Command:
+          </label>
           <textarea
             className="new-process-command"
             id="command"
