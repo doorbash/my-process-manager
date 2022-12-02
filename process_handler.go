@@ -40,7 +40,7 @@ func (ph *ProcessHandler) AddProcess(p *Process) {
 
 	go func() {
 		for {
-			p.Run(func(time int64, _type, message string) {
+			lf := func(time int64, _type, message string) {
 				ph.logsLock.RLock()
 				ph.logs[p.Id].Add(&Log{
 					Time:    time,
@@ -49,7 +49,8 @@ func (ph *ProcessHandler) AddProcess(p *Process) {
 				})
 				ph.logsLock.RUnlock()
 				ph.logsFunc(p.Id, time, _type, message)
-			})
+			}
+			p.Run(lf)
 			var status cmd.Status
 			select {
 			case <-time.After(RUN_CONFIRM_DELAY):
@@ -60,6 +61,9 @@ func (ph *ProcessHandler) AddProcess(p *Process) {
 			}
 			log.Println("**********************************************************************************")
 			log.Println(status)
+			if status.Error != nil {
+				lf(time.Now().UnixMilli(), "err", status.Error.Error())
+			}
 			p.RunStatus = "idle"
 			ph.runStatusFunc(p.Id, "idle")
 			time.Sleep(DELAY_BEFORE_RUN_AGAIN)

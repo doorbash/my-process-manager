@@ -1,12 +1,13 @@
 package main
 
 import (
+	"fmt"
 	"log"
 	"os/exec"
-	"strings"
 	"syscall"
 	"time"
 
+	"github.com/buildkite/shellwords"
 	"github.com/go-cmd/cmd"
 )
 
@@ -24,7 +25,13 @@ type Process struct {
 }
 
 func (p *Process) Run(logsFun func(time int64, t string, l string)) {
-	c := strings.Split(p.Command, " ")
+	c, err := shellwords.Split(p.Command)
+	if err != nil {
+		fmt.Println(err)
+		logsFun(time.Now().UnixMilli(), "err", err.Error())
+		return
+	}
+	fmt.Println(c)
 	p.GoCmd = cmd.NewCmdOptions(cmd.Options{
 		Buffered:  false,
 		Streaming: true,
