@@ -8,7 +8,7 @@
   "version": "2",
   "Path": "",
   "BuildDir": "",
-  "outputfilename": "mpm.exe",
+  "outputfilename": "my-process-manager.exe",
   "OutputType": "",
   "Platform": "",
   "runNonNativeBuildHooks": false,
@@ -21,7 +21,7 @@
     "companyName": "mpm",
     "productName": "mpm",
     "productVersion": "1.3.0",
-    "copyright": "Copyright 2022",
+    "copyright": "Copyright 2024",
     "comments": "Built using Wails (https://wails.app)"
   },
   "debounceMS": 100,

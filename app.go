@@ -7,7 +7,7 @@ import (
 	"log"
 	"time"
 
-	"github.com/getlantern/systray"
+	"github.com/energye/systray"
 	"github.com/wailsapp/wails/v2/pkg/runtime"
 )
 
@@ -49,17 +49,11 @@ func (b *App) startup(ctx context.Context) {
 			systray.SetTitle(APP_TITLE)
 			systray.SetTooltip(APP_TITLE)
 			mOpen := systray.AddMenuItem(fmt.Sprintf("Show %s", APP_TITLE), "Show App")
+			mOpen.Click(func() { runtime.WindowShow(b.ctx) })
 			mQuit := systray.AddMenuItem("Exit", "Exit app")
-			go func() {
-				for {
-					select {
-					case <-mQuit.ClickedCh:
-						systray.Quit()
-					case <-mOpen.ClickedCh:
-						runtime.WindowShow(b.ctx)
-					}
-				}
-			}()
+			mQuit.Click(func() { systray.Quit() })
+			systray.SetOnClick(func(menu systray.IMenu) { runtime.WindowShow(b.ctx) })
+			systray.SetOnRClick(func(menu systray.IMenu) { menu.ShowMenu() })
 		}, func() {
 			runtime.Quit(b.ctx)
 		})
