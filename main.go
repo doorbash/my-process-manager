@@ -34,13 +34,13 @@ func main() {
 
 	err := wails.Run(&options.App{
 		Title:             APP_TITLE,
-		Width:             480,
+		Width:             500,
 		Height:            800,
-		DisableResize:     true,
+		DisableResize:     false,
 		Fullscreen:        false,
 		Frameless:         false,
 		StartHidden:       false,
-		HideWindowOnClose: true,
+		HideWindowOnClose: false,
 		LogLevel:          logger.DEBUG,
 		OnStartup: func(ctx context.Context) {
 			runtimeContext = ctx

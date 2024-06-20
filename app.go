@@ -43,21 +43,20 @@ func (b *App) startup(ctx context.Context) {
 		runtime.EventsEmit(b.ctx, "run-log", id, time, _type, message)
 	})
 	b.processHandler.Start(b.ctx, b.dbHandler)
-	go func() {
-		systray.Run(func() {
-			systray.SetIcon(Icon)
-			systray.SetTitle(APP_TITLE)
-			systray.SetTooltip(APP_TITLE)
-			mOpen := systray.AddMenuItem(fmt.Sprintf("Show %s", APP_TITLE), "Show App")
-			mOpen.Click(func() { runtime.WindowShow(b.ctx) })
-			mQuit := systray.AddMenuItem("Exit", "Exit app")
-			mQuit.Click(func() { systray.Quit() })
-			systray.SetOnClick(func(menu systray.IMenu) { runtime.WindowShow(b.ctx) })
-			systray.SetOnRClick(func(menu systray.IMenu) { menu.ShowMenu() })
-		}, func() {
-			runtime.Quit(b.ctx)
-		})
-	}()
+	start, _ := systray.RunWithExternalLoop(func() {
+		systray.SetIcon(Icon)
+		systray.SetTitle(APP_TITLE)
+		systray.SetTooltip(APP_TITLE)
+		mOpen := systray.AddMenuItem(fmt.Sprintf("Show %s", APP_TITLE), "Show App")
+		mOpen.Click(func() { runtime.WindowShow(b.ctx) })
+		mQuit := systray.AddMenuItem("Exit", "Exit app")
+		mQuit.Click(func() { systray.Quit() })
+		systray.SetOnClick(func(menu systray.IMenu) { runtime.WindowShow(b.ctx) })
+		systray.SetOnRClick(func(menu systray.IMenu) { menu.ShowMenu() })
+	}, func() {
+		runtime.Quit(b.ctx)
+	})
+	start()
 }
 
 // domReady is called after the front-end dom has been loaded

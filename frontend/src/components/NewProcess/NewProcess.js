@@ -27,10 +27,13 @@ class NewProcess extends Component {
         error: undefined,
       }
     }
+    this.submitClicked = false
   }
 
   handleSubmit(e) {
     e.preventDefault()
+    if (this.submitClicked) return
+    this.submitClicked = true
     console.log("form submitted!")
     this.setState({
       error: undefined,
