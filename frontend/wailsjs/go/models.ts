@@ -1,3 +1,26 @@
+export namespace cmd {
+	
+	export class Cmd {
+	    Name: string;
+	    Args: string[];
+	    Env: string[];
+	    Dir: string;
+	
+	    static createFrom(source: any = {}) {
+	        return new Cmd(source);
+	    }
+	
+	    constructor(source: any = {}) {
+	        if ('string' === typeof source) source = JSON.parse(source);
+	        this.Name = source["Name"];
+	        this.Args = source["Args"];
+	        this.Env = source["Env"];
+	        this.Dir = source["Dir"];
+	    }
+	}
+
+}
+
 export namespace main {
 	
 	export class Log {

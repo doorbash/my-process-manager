@@ -4,7 +4,6 @@ import (
 	"fmt"
 	"log"
 	"os/exec"
-	"syscall"
 	"time"
 
 	"github.com/buildkite/shellwords"
@@ -37,7 +36,7 @@ func (p *Process) Run(logsFun func(time int64, t string, l string)) {
 		Streaming: true,
 		BeforeExec: []func(cmd *exec.Cmd){
 			func(cmd *exec.Cmd) {
-				cmd.SysProcAttr = &syscall.SysProcAttr{CreationFlags: 0x08000000} // CREATE_NO_WINDOW
+				SetNoWindow(cmd)
 			},
 		},
 	}, c[0], c[1:]...)
